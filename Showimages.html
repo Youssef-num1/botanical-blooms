@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botanical Blooms — Colored Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Cormorant+Garamond:ital@0;1&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1c2f52;
+    --navy-light: #2f4a7a;
+    --gold: #c8a05a;
+    --cream: #faf6ee;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    
+    background-color: #FFFDF5;
+     background-size : 100% 100% ;
+    background-repeat:no-repeat;
+    background-position: center;
+    overflow-x: hidden;
+
+    color: var(--navy);
+    padding: 0 0 80px;
+    min-height: 100vh;
+  }
+  .hero { text-align: center; padding: 56px 20px 40px; }
+  .hero .eyebrow {
+    font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.2rem); color: var(--navy); letter-spacing: 1px;
+  }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 20px auto; max-width: 280px; }
+  .divider .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .divider .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+  .hero p.sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.15rem;
+    color: var(--navy-light); max-width: 480px; margin: 0 auto;
+  }
+  .gallery {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    max-width: 1100px; margin: 40px auto 0; padding: 0 20px;
+  }
+  @media (min-width: 620px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .gallery { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1200px) { .gallery { grid-template-columns: repeat(5, 1fr); } }
+  .card {
+    background: var(--card); border-radius: 14px; padding: 10px;
+    box-shadow: 0 4px 18px rgba(28,47,82,0.08);
+    border: 1px solid rgba(200,160,90,0.15);
+    cursor: pointer; transition: transform 0.35s ease, box-shadow 0.35s ease;
+    opacity: 0; transform: translateY(16px);
+  }
+  .card.visible { opacity: 1; transform: translateY(0); }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(28,47,82,0.18); border-color: var(--gold); }
+  .card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; display: block; }
+  .card .num {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.85rem;
+    color: var(--gold); text-align: center; margin-top: 8px; letter-spacing: 1px;
+  }
+  #lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(15, 22, 38, 0.92);
+    align-items: center; justify-content: center; z-index: 999; padding: 24px;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  #lightbox.active { display: flex; opacity: 1; }
+  #lightbox img { max-width: 100%; max-height: 85vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .lb-close, .lb-nav {
+    position: absolute; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    cursor: pointer; transition: background 0.2s ease; user-select: none;
+  }
+  .lb-close:hover, .lb-nav:hover { background: rgba(255,255,255,0.25); }
+  .lb-close { top: 24px; right: 24px; }
+  .lb-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 24px; top: 50%; transform: translateY(-50%); }
+  footer {
+    text-align: center; margin-top: 70px; padding: 0 20px;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    color: var(--navy-light); font-size: 1rem;
+  }
+
+  .botanicalblooms{
+    position :fixed;
+    top:10 px ;
+    left:10px;
+    width: 80px;
+    height :auto;
+  }
+</style>
+</head>
+<body>
+<img src  = "botanical.blooms.png" class= "botanicalblooms" >
+<div class="hero">
+  <div class="eyebrow">Botanical Blooms</div>
+  <h1>The Colored Gallery</h1>
+  <div class="divider"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+  <p class="sub">A preview of all 50 designs, fully colored — for inspiration whenever you need it.</p>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<div id="lightbox">
+  <div class="lb-close" onclick="closeLightbox()">✕</div>
+  <div class="lb-nav lb-prev" onclick="navigate(-1)">‹</div>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lb-nav lb-next" onclick="navigate(1)">›</div>
+</div>
+<footer>With love, from one flower to the next 🌸</footer>
+
+<script>
+
+  // الصور من 1.jpg إلى 50.png
+  // الصور موجودة في نفس مجلد ملف HTML
+
+  const images = Array.from(
+    { length: 50 },
+    (_, i) => `${i + 1}.png`
+  );
+
+  const gallery = document.getElementById('gallery');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  let currentIndex = 0;
+
+  images.forEach((name, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const img = document.createElement('img');
+    img.src = name;
+    img.alt = 'Colored coloring page ' + (i + 1);
+    img.loading = 'lazy';
+
+    const num = document.createElement('div');
+    num.className = 'num';
+    num.textContent = 'No. ' + String(i + 1).padStart(2, '0');
+
+    card.appendChild(img);
+    card.appendChild(num);
+    card.onclick = () => openLightbox(i);
+    gallery.appendChild(card);
+  });
+
+  function openLightbox(i) {
+    currentIndex = i;
+    lightboxImg.src = images[i];
+    lightbox.classList.add('active');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+
+  function navigate(dir) {
+    currentIndex = (currentIndex + dir + images.length) % images.length;
+    lightboxImg.src = images[currentIndex];
+  }
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft') navigate(-1);
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+</script>
+
+</body>
+</html>
