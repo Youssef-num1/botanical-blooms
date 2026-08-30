@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get the Book — Botanical Blooms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Cormorant+Garamond:ital@0;1&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --forest: #2d3b28; --forest-light: #3f5136; --gold: #b8934a; --cream-light: #fdf8ee; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: radial-gradient(ellipse at top, #fffdf9 0%, #f6ecd9 70%);
+    color: var(--forest); min-height: 100vh;
+    display: flex; align-items: center; justify-content: center; padding: 50px 24px;
+  }
+  .card { max-width: 480px; width: 100%; text-align: center; }
+  .eyebrow { font-size: 0.8rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+  h1 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(1.7rem, 6vw, 2.4rem); margin-bottom: 16px; }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 0 auto 22px; max-width: 200px; }
+  .divider .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .divider .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  p.msg { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.15rem; color: var(--forest-light); margin-bottom: 30px; line-height: 1.5; }
+  .countries { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .countries a {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 14px; border-radius: 10px; background: var(--cream-light);
+    border: 1px solid rgba(184,147,74,0.3); color: var(--forest);
+    text-decoration: none; font-weight: 500; font-size: 0.9rem;
+    box-shadow: 0 3px 12px rgba(45,59,40,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .countries a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,59,40,0.16); border-color: var(--gold); }
+  .flag { font-size: 1.2rem; }
+  footer { margin-top: 34px; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--forest-light); font-size: 0.95rem; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="eyebrow">Botanical Blooms</div>
+  <h1>Get the Book</h1>
+  <div class="divider"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+  <p class="msg">Available on Amazon worldwide. Tap your country below to shop.</p>
+
+  <div class="countries" id="countries"></div>
+
+  <footer>Happy coloring 🌸</footer>
+</div>
+
+<script>
+  // غيّر PUT_ASIN_HERE بالـ ASIN بتاع كتابك
+  const ASIN = "B0HG89KDXV";
+
+  const stores = [
+    { flag: "🇺🇸", label: "US", domain: "amazon.com" },
+    { flag: "🇬🇧", label: "UK", domain: "amazon.co.uk" },
+    { flag: "🇩🇪", label: "Germany", domain: "amazon.de" },
+    { flag: "🇫🇷", label: "France", domain: "amazon.fr" },
+    { flag: "🇪🇸", label: "Spain", domain: "amazon.es" },
+    { flag: "🇮🇹", label: "Italy", domain: "amazon.it" },
+    { flag: "🇳🇱", label: "Netherlands", domain: "amazon.nl" },
+    { flag: "🇵🇱", label: "Poland", domain: "amazon.pl" },
+    { flag: "🇸🇪", label: "Sweden", domain: "amazon.se" },
+    { flag: "🇧🇪", label: "Belgium", domain: "amazon.com.be" },
+    { flag: "🇮🇪", label: "Ireland", domain: "amazon.ie" },
+    { flag: "🇯🇵", label: "Japan", domain: "amazon.co.jp" },
+    { flag: "🇨🇦", label: "Canada", domain: "amazon.ca" },
+    { flag: "🇦🇺", label: "Australia", domain: "amazon.com.au" }
+  ];
+
+  const container = document.getElementById('countries');
+  stores.forEach(store => {
+    const a = document.createElement('a');
+    a.href = `https://www.${store.domain}/dp/${ASIN}`;
+    a.target = "_blank";
+    a.innerHTML = `<span class="flag">${store.flag}</span> ${store.label}`;
+    container.appendChild(a);
+  });
+</script>
+
+</body>
+</html>
